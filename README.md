@@ -179,7 +179,7 @@ handleFormSubmit = e => {
 
     ### Compile Early and Often!!!
 
-24. Remove the HEROES array from App.js and create a `heroes.service.js` file on the root of your application.
+24. Remove the HEROES array from App.js and create a `heroes.service.js` file in the src folder of your application.
 
 ```js
 const HEROES = [
