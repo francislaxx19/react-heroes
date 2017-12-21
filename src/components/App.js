@@ -1,7 +1,10 @@
 import React, { Component } from "react";
-import "./App.css";
-import HeroListItem from "./HeroListItem";
+import HeroesList from "./HeroesList";
+import HeroForm from "./HeroForm";
+import Dashboard from "./Dashboard";
+import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import { getHeroes } from "../heroes.service";
+import "./App.css";
 
 class App extends Component {
   state = {
@@ -62,53 +65,55 @@ class App extends Component {
       }
     });
   };
-
   render() {
     return (
-      <div className="App">
-        <h1>{this.state.title}</h1>
-        <div className="container">
-          <div className="row">
-            <div className="col-md-6 col-sm-12">
-              <ul className="heroes">
-                <HeroListItem
-                  heroes={this.state.heroes}
-                  handleSelectedHero={this.handleSelectedHero}
-                />
-              </ul>
-            </div>
-            <div className="col-md-6 col-sm-12">
-              <h2 style={{ textAlign: "center" }}>
-                {this.state.selectedHero.name}
-              </h2>
-              <form
-                className="form-horizontal"
-                style={{ width: "60%", padding: "25px" }}
-                onSubmit={e => this.handleFormSubmit(e)}
-              >
-                <div className="form-group">
-                  <label className="control-label">ID: </label>
-                  {this.state.selectedHero.id}
-                </div>
-                <div className="form-group">
-                  <label className="control-label">Hero Name: </label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    value={this.state.selectedHero.name}
-                    onChange={e => this.handleInputChange(e)}
-                  />
-                </div>
-                <input
-                  className="button btn btn-info"
-                  type="submit"
-                  value="submit"
-                />
-              </form>
-            </div>
-          </div>
+      <Router>
+        <div>
+          <h1>Git Tour of Heroes</h1>
+          <nav>
+            <NavLink exact to="/" activeClassName="active">
+              Dashboard
+            </NavLink>
+            <NavLink to="/heroes" activeClassName="active">
+              Heroes
+            </NavLink>
+          </nav>
+          <hr />
+          <Route
+            exact
+            path="/"
+            render={props => (
+              <Dashboard
+                {...props}
+                heroes={this.state.heroes}
+                handleSelectedHero={this.handleSelectedHero}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/heroes"
+            render={props => (
+              <HeroesList
+                {...props}
+                heroes={this.state.heroes}
+                handleSelectedHero={this.handleSelectedHero}
+              />
+            )}
+          />
+          <Route
+            path={"/heroes/details/:heroid"}
+            render={props => (
+              <HeroForm
+                {...props}
+                selectedHero={this.state.selectedHero}
+                submitForm={this.handleFormSubmit}
+                inputChange={this.handleInputChange}
+              />
+            )}
+          />
         </div>
-      </div>
+      </Router>
     );
   }
 }
